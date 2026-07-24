@@ -26,7 +26,7 @@ export default function ResultPage() {
     script.async = true;
     script.onload = () => {
       if (window.Kakao) {
-        window.Kakao.init("3a42cb3b12adc32a28996b96446e95d9");
+        window.Kakao.init("90e16e526ed3e925c9822acccf936f62");
         console.log("✅ 카카오 SDK 초기화 완료");
       }
     };
