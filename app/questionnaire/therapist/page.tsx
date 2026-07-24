@@ -126,7 +126,7 @@ export default function TherapistPage() {
           options={["정상","거북목","일자목","기타"]}
           value={posture.neck}
           etcValue={posture.neckEtc}
-          onEtcChange={(v)=>setPosture({...posture, neckEtc:v})}
+          onEtcChange={(v: string)=>setPosture({...posture, neckEtc: v})}
           onChange={(v)=>setPosture({...posture, neck:v})}
         />
 
