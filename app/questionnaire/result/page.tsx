@@ -176,6 +176,7 @@ export default function ResultPage() {
   const handleShare = async () => {
     try {
       console.log("공유 시작...");
+      console.log("현재 URL:", window.location.origin);
       
       // 1단계: Google Apps Script 호출
       console.log("Google Apps Script 호출 중...");
@@ -198,53 +199,73 @@ export default function ResultPage() {
       const pdfUrl = result.url;
       console.log("PDF URL:", pdfUrl);
 
-      // 2단계: 카카오 SDK 초기화 대기 (최대 3초)
+      // 2단계: 카카오 SDK 초기화 확인
       console.log("Kakao SDK 초기화 확인 중...");
-      let kakaoReady = false;
-      for (let i = 0; i < 30; i++) {
-        if (window.Kakao && window.Kakao.isInitialized()) {
-          console.log("✅ Kakao SDK 준비 완료");
-          kakaoReady = true;
-          break;
-        }
-        await new Promise(r => setTimeout(r, 100));
-      }
-
-      if (!kakaoReady) {
-        console.error("❌ Kakao SDK 초기화 실패");
-        alert("카카오톡 SDK가 준비되지 않았습니다. 페이지를 새로고침하고 다시 시도해주세요.");
-        return;
-      }
-
-      // 3단계: 카카오 공유
-      console.log("3단계: 카카오 공유 시작");
-      window.Kakao.Share.sendDefault({
-        objectType: "feed",
-        content: {
-          title: `${data.name}님의 재활 평가 결과`,
-          description: "평가 결과를 확인해주세요",
-          imageUrl: `${window.location.origin}/logo.png`,
-          link: {
-            mobileWebUrl: pdfUrl,
-            webUrl: pdfUrl,
-          },
-        },
-        buttons: [
-          {
-            title: "결과 보기",
-            link: {
-              mobileWebUrl: pdfUrl,
-              webUrl: pdfUrl,
+      if (window.Kakao && window.Kakao.isInitialized()) {
+        console.log("✅ Kakao SDK 준비 완료");
+        
+        try {
+          // 3단계: 카카오 공유 시도
+          console.log("3단계: 카카오 공유 시작");
+          window.Kakao.Share.sendDefault({
+            objectType: "feed",
+            content: {
+              title: `${data.name}님의 재활 평가 결과`,
+              description: "평가 결과를 확인해주세요",
+              imageUrl: `${window.location.origin}/logo.png`,
+              link: {
+                mobileWebUrl: pdfUrl,
+                webUrl: pdfUrl,
+              },
             },
-          },
-        ],
-      });
-
-      console.log("✅ 공유 완료");
+            buttons: [
+              {
+                title: "결과 보기",
+                link: {
+                  mobileWebUrl: pdfUrl,
+                  webUrl: pdfUrl,
+                },
+              },
+            ],
+          });
+          console.log("✅ 카카오 공유 성공");
+        } catch (kakaoError) {
+          console.error("❌ 카카오 공유 실패:", kakaoError);
+          // 폴백: 클립보드에 복사
+          fallbackShare(pdfUrl);
+        }
+      } else {
+        console.warn("⚠️ Kakao SDK 미준비, 폴백 방식 사용");
+        // 폴백: 클립보드에 복사
+        fallbackShare(pdfUrl);
+      }
 
     } catch (e) {
       console.error("❌ 에러:", e);
       alert("에러 발생: " + (e as Error).message);
+    }
+  };
+
+  const fallbackShare = async (pdfUrl: string) => {
+    try {
+      const shareMessage = `${data.name}님의 재활 평가 결과\n\n${pdfUrl}`;
+      
+      // 클립보드에 복사
+      await navigator.clipboard.writeText(shareMessage);
+      console.log("✅ 클립보드에 복사 완료");
+      
+      alert(
+        "📋 PDF 링크가 클립보드에 복사되었습니다!\n\n" +
+        "카카오톡을 열어 직접 붙여넣기(Ctrl+V)하여 공유하세요.\n\n" +
+        "또는 아래 링크를 복사해서 공유하세요:\n\n" +
+        pdfUrl
+      );
+    } catch (clipboardError) {
+      console.error("❌ 클립보드 복사 실패:", clipboardError);
+      alert(
+        "PDF 링크:\n\n" + pdfUrl + "\n\n" +
+        "이 링크를 복사해서 카카오톡에서 공유하세요."
+      );
     }
   };
 
