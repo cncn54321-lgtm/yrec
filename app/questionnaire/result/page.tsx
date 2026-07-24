@@ -1,5 +1,17 @@
 "use client";
 
+declare global {
+  interface Window {
+    Kakao: {
+      init: (key: string) => void;
+      isInitialized: () => boolean;
+      Share: {
+        sendDefault: (config: any) => void;
+      };
+    };
+  }
+}
+
 import { useEffect, useState } from "react";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
@@ -195,7 +207,7 @@ export default function ResultPage() {
       }
 
       // 3단계: 카카오 공유
-      Kakao.Share.sendDefault({
+      window.Kakao.Share.sendDefault({
         objectType: "feed",
         content: {
           title: `${data.name}님의 재활 평가 결과`,
