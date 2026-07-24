@@ -127,7 +127,7 @@ export default function TherapistPage() {
           value={posture.neck}
           etcValue={posture.neckEtc}
           onEtcChange={(v: string)=>setPosture({...posture, neckEtc: v})}
-          onChange={(v)=>setPosture({...posture, neck:v})}
+          onChange={(v: string)=>setPosture({...posture, neck:v})}
         />
 
         <PostureBlock
@@ -136,7 +136,7 @@ export default function TherapistPage() {
           value={posture.shoulder}
           etcValue={posture.shoulderEtc}
           onEtcChange={(v)=>setPosture({...posture, shoulderEtc:v})}
-          onChange={(v)=>setPosture({...posture, shoulder:v})}
+          onChange={(v: string)=>setPosture({...posture, shoulder:v})}
         />
 
         <PostureBlock
@@ -145,7 +145,7 @@ export default function TherapistPage() {
           value={posture.pelvis}
           etcValue={posture.pelvisEtc}
           onEtcChange={(v)=>setPosture({...posture, pelvisEtc:v})}
-          onChange={(v)=>setPosture({...posture, pelvis:v})}
+          onChange={(v: string)=>setPosture({...posture, pelvis:v})}
         />
 
         <PostureBlock
@@ -154,7 +154,7 @@ export default function TherapistPage() {
           value={posture.knee}
           etcValue={posture.kneeEtc}
           onEtcChange={(v)=>setPosture({...posture, kneeEtc:v})}
-          onChange={(v)=>setPosture({...posture, knee:v})}
+          onChange={(v: string)=>setPosture({...posture, knee:v})}
         />
 
         <PostureBlock
@@ -163,7 +163,7 @@ export default function TherapistPage() {
           value={posture.ankle}
           etcValue={posture.ankleEtc}
           onEtcChange={(v)=>setPosture({...posture, ankleEtc:v})}
-          onChange={(v)=>setPosture({...posture, ankle:v})}
+          onChange={(v: string)=>setPosture({...posture, ankle:v})}
         />
       </Section>
 
