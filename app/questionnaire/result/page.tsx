@@ -25,9 +25,11 @@ export default function ResultPage() {
     script.src = "https://developers.kakao.com/sdk/js/kakao.js";
     script.async = true;
     script.onload = () => {
+      console.log("🔍 Kakao SDK 로드됨");
       if (window.Kakao) {
         window.Kakao.init("90e16e526ed3e925c9822acccf936f62");
         console.log("✅ 카카오 SDK 초기화 완료");
+        console.log("초기화 상태:", window.Kakao.isInitialized());
       }
     };
     script.onerror = () => {
@@ -176,6 +178,7 @@ export default function ResultPage() {
       console.log("공유 시작...");
       
       // 1단계: Google Apps Script 호출
+      console.log("Google Apps Script 호출 중...");
       const res = await fetch(
         "https://script.google.com/macros/s/AKfycbzllPME_q7mE9LrDtdh-9wuutLpnniWsyerD5BDfKeRQHXBfkOJYOlgVlZAmEFBJMlQ/exec",
         {
@@ -195,18 +198,26 @@ export default function ResultPage() {
       const pdfUrl = result.url;
       console.log("PDF URL:", pdfUrl);
 
-      // 2단계: 카카오 SDK 확인
-      if (!window.Kakao) {
-        alert("카카오톡 SDK가 로드되지 않았습니다. 페이지를 새로고침하고 다시 시도해주세요.");
-        return;
+      // 2단계: 카카오 SDK 초기화 대기 (최대 3초)
+      console.log("Kakao SDK 초기화 확인 중...");
+      let kakaoReady = false;
+      for (let i = 0; i < 30; i++) {
+        if (window.Kakao && window.Kakao.isInitialized()) {
+          console.log("✅ Kakao SDK 준비 완료");
+          kakaoReady = true;
+          break;
+        }
+        await new Promise(r => setTimeout(r, 100));
       }
 
-      if (!window.Kakao.isInitialized()) {
-        alert("카카오톡이 아직 초기화 중입니다. 잠시 후 다시 시도해주세요.");
+      if (!kakaoReady) {
+        console.error("❌ Kakao SDK 초기화 실패");
+        alert("카카오톡 SDK가 준비되지 않았습니다. 페이지를 새로고침하고 다시 시도해주세요.");
         return;
       }
 
       // 3단계: 카카오 공유
+      console.log("3단계: 카카오 공유 시작");
       window.Kakao.Share.sendDefault({
         objectType: "feed",
         content: {
@@ -229,8 +240,10 @@ export default function ResultPage() {
         ],
       });
 
+      console.log("✅ 공유 완료");
+
     } catch (e) {
-      console.error("에러:", e);
+      console.error("❌ 에러:", e);
       alert("에러 발생: " + (e as Error).message);
     }
   };
