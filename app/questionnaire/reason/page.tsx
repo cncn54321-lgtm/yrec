@@ -64,6 +64,10 @@ export default function ReasonPage() {
     router.push("/questionnaire/discomfort");
   };
 
+  const handlePrev = () => {
+    router.push("/questionnaire/medical");
+  };
+
   const isValid =
     selectedReason &&
     (selectedReason !== "기타" || etcText);
@@ -177,26 +181,37 @@ export default function ReasonPage() {
                   value={etcText}
                   onChange={(e) => setEtcText(e.target.value)}
                   placeholder="기타 내용을 입력해주세요."
-                  className="mt-4 w-full rounded-xl border border-gray-300 px-4 py-3"
+                  className="mt-4 w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-blue-500 focus:outline-none"
                 />
               )}
             </div>
           );
         })}
 
-        {/* 다음 버튼 */}
-        <button
-          onClick={handleNext}
-          disabled={!isValid}
-          className={`mt-8 w-full rounded-xl py-4 text-lg font-semibold text-white
-          ${
-            isValid
-              ? "bg-blue-600 hover:bg-blue-700"
-              : "bg-gray-300 cursor-not-allowed"
-          }`}
-        >
-          다음
-        </button>
+        {/* 버튼 그룹 */}
+        <div className="flex gap-3 mt-8">
+          {/* 이전 버튼 */}
+          <button
+            onClick={handlePrev}
+            className="flex-1 rounded-xl py-4 text-lg font-semibold text-blue-600 bg-white border-2 border-blue-600 hover:bg-blue-50 transition"
+          >
+            이전
+          </button>
+
+          {/* 다음 버튼 */}
+          <button
+            onClick={handleNext}
+            disabled={!isValid}
+            className={`flex-1 rounded-xl py-4 text-lg font-semibold text-white transition
+            ${
+              isValid
+                ? "bg-blue-600 hover:bg-blue-700"
+                : "bg-gray-300 cursor-not-allowed"
+            }`}
+          >
+            다음
+          </button>
+        </div>
       </div>
     </QuestionLayout>
   );

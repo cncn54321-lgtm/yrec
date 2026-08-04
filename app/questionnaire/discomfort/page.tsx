@@ -54,7 +54,11 @@ export default function DiscomfortPage() {
     (!selectedItems.includes("📝 기타") || etcText);
 
   const handleNext = () => {
-    router.push("/questionnaire/goal"); // 🔥 여기 핵심
+    router.push("/questionnaire/goal");
+  };
+
+  const handlePrev = () => {
+    router.push("/questionnaire/reason");
   };
 
   return (
@@ -105,18 +109,30 @@ export default function DiscomfortPage() {
           );
         })}
 
-        {/* 🔥 다음 버튼 */}
-        <button
-          onClick={handleNext}
-          disabled={!isValid}
-          className={`mt-8 w-full rounded-xl py-4 text-lg font-semibold text-white ${
-            isValid
-              ? "bg-blue-600 hover:bg-blue-700"
-              : "bg-gray-300 cursor-not-allowed"
-          }`}
-        >
-          다음
-        </button>
+        {/* 버튼 그룹 */}
+        <div className="flex gap-3 mt-8">
+          {/* 이전 버튼 */}
+          <button
+            onClick={handlePrev}
+            className="flex-1 rounded-xl py-4 text-lg font-semibold text-blue-600 bg-white border-2 border-blue-600 hover:bg-blue-50 transition"
+          >
+            이전
+          </button>
+
+          {/* 다음 버튼 */}
+          <button
+            onClick={handleNext}
+            disabled={!isValid}
+            className={`flex-1 rounded-xl py-4 text-lg font-semibold text-white transition
+            ${
+              isValid
+                ? "bg-blue-600 hover:bg-blue-700"
+                : "bg-gray-300 cursor-not-allowed"
+            }`}
+          >
+            다음
+          </button>
+        </div>
       </div>
     </QuestionLayout>
   );

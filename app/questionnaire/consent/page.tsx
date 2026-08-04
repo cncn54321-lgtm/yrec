@@ -10,6 +10,7 @@ export default function ConsentPage() {
   const [check1, setCheck1] = useState(false);
   const [check2, setCheck2] = useState(false);
   const [check3, setCheck3] = useState(false);
+  const [check4, setCheck4] = useState(false);
 
   const allChecked = check1 && check2 && check3;
 
@@ -23,10 +24,11 @@ export default function ConsentPage() {
       JSON.stringify({
         ...prev,
         consent: true,
+        marketingConsent: check4,
       })
     );
 
-    router.push("/writer");
+    router.push("/questionnaire/info");
   };
 
   return (
@@ -56,16 +58,21 @@ export default function ConsentPage() {
             목적으로만 사용됩니다.
           </div>
 
-          <label className="flex items-center gap-3">
-            <input type="checkbox" onChange={() => setCheck1(!check1)} />
-            <span>위 내용을 확인하였으며 동의합니다.</span>
+          <label className="flex items-center gap-4 cursor-pointer p-3 hover:bg-gray-50 rounded-lg transition">
+            <input 
+              type="checkbox" 
+              checked={check1}
+              onChange={() => setCheck1(!check1)}
+              className="w-6 h-6"
+            />
+            <span className="text-base">위 내용을 확인하였으며 동의합니다.</span>
           </label>
         </section>
 
         {/* 2 */}
         <section className="space-y-3">
           <h2 className="text-lg font-semibold">
-            ② 의료행위 아님 <span className="text-red-500">(필수)</span>
+            ② 비의료건강관리서비스 안내 <span className="text-red-500">(필수)</span>
           </h2>
 
           <div className="rounded-xl border p-4 text-sm leading-7 text-gray-700">
@@ -76,9 +83,14 @@ export default function ConsentPage() {
             의료적 진단을 대신하지 않습니다.
           </div>
 
-          <label className="flex items-center gap-3">
-            <input type="checkbox" onChange={() => setCheck2(!check2)} />
-            <span>위 내용을 확인하였으며 동의합니다.</span>
+          <label className="flex items-center gap-4 cursor-pointer p-3 hover:bg-gray-50 rounded-lg transition">
+            <input 
+              type="checkbox" 
+              checked={check2}
+              onChange={() => setCheck2(!check2)}
+              className="w-6 h-6"
+            />
+            <span className="text-base">위 내용을 확인하였으며 동의합니다.</span>
           </label>
         </section>
 
@@ -89,38 +101,78 @@ export default function ConsentPage() {
           </h2>
 
           <div className="rounded-xl border p-4 text-sm leading-7 text-gray-700">
+            <div className="grid grid-cols-2 gap-8">
+              <div>
+                <strong>수집 항목</strong>
+                <ul className="list-disc ml-6 mt-2">
+                  <li>이름</li>
+                  <li>연락처</li>
+                  <li>평가기록</li>
+                  <li>사진 및 영상(촬영 시)</li>
+                </ul>
+              </div>
 
-            <strong>수집 항목</strong>
-            <ul className="list-disc ml-6 mt-2">
-              <li>이름</li>
-              <li>연락처</li>
-              <li>평가기록</li>
-              <li>사진 및 영상(촬영 시)</li>
-            </ul>
-
-            <br />
-
-            <strong>이용 목적</strong>
-            <ul className="list-disc ml-6 mt-2">
-              <li>회원 관리</li>
-              <li>재활운동 프로그램 제공</li>
-              <li>평가 리포트 작성</li>
-              <li>운동기록 관리</li>
-            </ul>
-
+              <div>
+                <strong>이용 목적</strong>
+                <ul className="list-disc ml-6 mt-2">
+                  <li>회원 관리</li>
+                  <li>재활운동 프로그램 제공</li>
+                  <li>평가 리포트 작성</li>
+                  <li>운동기록 관리</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
-          <label className="flex items-center gap-3">
-            <input type="checkbox" onChange={() => setCheck3(!check3)} />
-            <span>개인정보 수집 및 이용에 동의합니다.</span>
+          <label className="flex items-center gap-4 cursor-pointer p-3 hover:bg-gray-50 rounded-lg transition">
+            <input 
+              type="checkbox" 
+              checked={check3}
+              onChange={() => setCheck3(!check3)}
+              className="w-6 h-6"
+            />
+            <span className="text-base">개인정보 수집 및 이용에 동의합니다.</span>
           </label>
+        </section>
+
+        {/* 4 */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold">
+            ④ 마케팅 정보 수신 동의 <span className="text-gray-400">(선택)</span>
+          </h2>
+
+          <div className="rounded-xl border p-4 text-sm leading-7 text-gray-700">
+            최신 프로그램, 이벤트, 건강정보 등 마케팅 목적의 정보를 
+            이메일, 문자, 전화 등을 통해 수신할 수 있습니다.
+            <br /><br />
+            언제든지 수신 거부 가능하며, 동의 여부와 관계없이 
+            서비스 운영에 필요한 필수 안내 사항은 발송될 수 있습니다.
+          </div>
+
+          <label className="flex items-center gap-4 cursor-pointer p-3 hover:bg-gray-50 rounded-lg transition">
+            <input 
+              type="checkbox" 
+              checked={check4}
+              onChange={() => setCheck4(!check4)}
+              className="w-6 h-6"
+            />
+            <span className="text-base">마케팅 정보 수신에 동의합니다.</span>
+          </label>
+
+          {/* 안내 문구 */}
+          <div className="mt-4 rounded-lg bg-gray-50 p-3 text-xs text-gray-600 border border-gray-200">
+            <p>
+              ※ 마케팅 정보 수신에 동의하지 않더라도 서비스 운영에 필요한 필수 안내 사항은 발송될 수 있습니다. 
+              이는 계약 이행 및 서비스 제공을 위한 공지로, 관련 법령에 따라 별도 동의 없이 제공될 수 있습니다.
+            </p>
+          </div>
         </section>
 
         {/* 버튼 */}
         <button
           onClick={handleNext}
           disabled={!allChecked}
-          className={`w-full rounded-xl py-4 text-lg font-semibold text-white
+          className={`w-full rounded-xl py-4 text-lg font-semibold text-white transition
           ${
             allChecked
               ? "bg-blue-600 hover:bg-blue-700"

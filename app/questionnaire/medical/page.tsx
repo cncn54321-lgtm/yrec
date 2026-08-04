@@ -35,40 +35,33 @@ export default function MedicalPage() {
     }
   };
 
-  // 🔥 자동 저장
-  useEffect(() => {
+  // 유효성
+  const isValid =
+    hasMedication &&
+    hasSurgery &&
+    diseases.length > 0 &&
+    (!hasMedication || hasMedication === "없음" || medicationText) &&
+    (!hasSurgery || hasSurgery === "없음" || surgeryText);
+
+  // 🔥 다음 버튼 클릭 시 저장
+  const handleNext = () => {
     const prev = JSON.parse(localStorage.getItem("formData") || "{}");
 
     localStorage.setItem(
       "formData",
       JSON.stringify({
         ...prev,
-        medical: {
-          medication:
-            hasMedication === "있음" ? medicationText : "없음",
-          diseases: diseases.includes("기타")
-            ? [...diseases.filter((d) => d !== "기타"), etcDisease]
-            : diseases,
-          surgery:
-            hasSurgery === "있음" ? surgeryText : "없음",
-        },
+        medication: hasMedication === "있음" ? "있음" : "없음",
+        medicationName: hasMedication === "있음" ? medicationText : "",
+        diseases: diseases.includes("기타")
+          ? [...diseases.filter((d) => d !== "기타"), etcDisease].join(", ")
+          : diseases.join(", "),
+        surgery: hasSurgery === "있음" ? surgeryText : "없음",
       })
     );
-  }, [
-    hasMedication,
-    medicationText,
-    diseases,
-    etcDisease,
-    hasSurgery,
-    surgeryText,
-  ]);
 
-  // 유효성
-  const isValid =
-    hasMedication &&
-    hasSurgery &&
-    (!hasMedication || hasMedication === "없음" || medicationText) &&
-    (!hasSurgery || hasSurgery === "없음" || surgeryText);
+    router.push("/questionnaire/reason");
+  };
 
   return (
     <QuestionLayout title="건강 상태 확인">
@@ -88,10 +81,10 @@ export default function MedicalPage() {
             <button
               key={val}
               onClick={() => setHasMedication(val)}
-              className={`flex-1 py-3 rounded-xl border ${
+              className={`flex-1 py-3 rounded-xl border-2 transition ${
                 hasMedication === val
-                  ? "bg-blue-600 text-white"
-                  : ""
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "border-gray-200 hover:border-blue-300"
               }`}
             >
               {val}
@@ -124,8 +117,10 @@ export default function MedicalPage() {
               <button
                 key={item}
                 onClick={() => toggleDisease(item)}
-                className={`py-3 rounded-xl border ${
-                  selected ? "bg-blue-600 text-white" : ""
+                className={`py-3 rounded-xl border-2 transition ${
+                  selected
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "border-gray-200 hover:border-blue-300"
                 }`}
               >
                 {item}
@@ -156,10 +151,10 @@ export default function MedicalPage() {
             <button
               key={val}
               onClick={() => setHasSurgery(val)}
-              className={`flex-1 py-3 rounded-xl border ${
+              className={`flex-1 py-3 rounded-xl border-2 transition ${
                 hasSurgery === val
-                  ? "bg-blue-600 text-white"
-                  : ""
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "border-gray-200 hover:border-blue-300"
               }`}
             >
               {val}
@@ -178,18 +173,30 @@ export default function MedicalPage() {
         )}
       </div>
 
-      {/* 다음 버튼 */}
-      <button
-        disabled={!isValid}
-        onClick={() => router.push("/questionnaire/reason")}
-        className={`mt-6 w-full rounded-xl py-4 text-white ${
-          isValid
-            ? "bg-blue-600 hover:bg-blue-700"
-            : "bg-gray-300 cursor-not-allowed"
-        }`}
-      >
-        다음
-      </button>
+      {/* 버튼 그룹 */}
+      <div className="flex gap-3 mt-8">
+        {/* 이전 버튼 */}
+        <button
+          onClick={() => router.push("/questionnaire/info")}
+          className="flex-1 rounded-xl py-4 text-lg font-semibold text-blue-600 bg-white border-2 border-blue-600 hover:bg-blue-50 transition"
+        >
+          이전
+        </button>
+
+        {/* 다음 버튼 */}
+        <button
+          disabled={!isValid}
+          onClick={handleNext}
+          className={`flex-1 rounded-xl py-4 text-lg font-semibold text-white transition
+          ${
+            isValid
+              ? "bg-blue-600 hover:bg-blue-700"
+              : "bg-gray-300 cursor-not-allowed"
+          }`}
+        >
+          다음
+        </button>
+      </div>
     </QuestionLayout>
   );
 }

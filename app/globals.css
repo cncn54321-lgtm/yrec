@@ -1,3 +1,18 @@
+@supports (color: lab(50% 0 0)) {
+  :root {
+    /* lab() 색상 비활성화 */
+  }
+}
+
+* {
+  --tw-color-space: srgb !important;
+  color-scheme: light !important;
+}
+
+html, body {
+  color-scheme: light !important;
+}
+
 @import "tailwindcss";
 
 :root {

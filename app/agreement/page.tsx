@@ -33,13 +33,6 @@ export default function AgreementPage() {
 
         <br />
 
-        <label>
-          <input type="checkbox" /> 위 내용을 확인했습니다.
-        </label>
-
-        <br />
-        <br />
-
         <Link href="/questionnaire/consent">
   <button
     style={{

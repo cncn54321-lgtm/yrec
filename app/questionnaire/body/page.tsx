@@ -77,19 +77,30 @@ export default function BodyPage() {
         </div>
       )}
 
-      {/* 🔥 다음 버튼 */}
-      <button
-        disabled={selectedParts.length === 0}
-        onClick={() => router.push("/questionnaire/complete")}
-        className={`mt-8 w-full rounded-xl py-4 text-lg font-semibold text-white
-        ${
-          selectedParts.length > 0
-            ? "bg-blue-600 hover:bg-blue-700"
-            : "bg-gray-300 cursor-not-allowed"
-        }`}
-      >
-        다음
-      </button>
+      {/* 버튼 그룹 */}
+      <div className="flex gap-3 mt-8">
+        {/* 이전 버튼 */}
+        <button
+          onClick={() => router.push("/questionnaire/goal")}
+          className="flex-1 rounded-xl py-4 text-lg font-semibold text-blue-600 bg-white border-2 border-blue-600 hover:bg-blue-50 transition"
+        >
+          이전
+        </button>
+
+        {/* 다음 버튼 */}
+        <button
+          disabled={selectedParts.length === 0}
+          onClick={() => router.push("/questionnaire/complete")}
+          className={`flex-1 rounded-xl py-4 text-lg font-semibold text-white transition
+          ${
+            selectedParts.length > 0
+              ? "bg-blue-600 hover:bg-blue-700"
+              : "bg-gray-300 cursor-not-allowed"
+          }`}
+        >
+          다음
+        </button>
+      </div>
     </QuestionLayout>
   );
 }
